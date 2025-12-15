@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профориентационный тест</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .form-section {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .skills-container {
+            margin-bottom: 20px;
+        }
+        
+        .skills-select-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .skills-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+        }
+        
+        .skills-select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .selected-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            min-height: 50px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .selected-skill {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .remove-skill {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 0;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+        
+        .remove-skill:hover {
+            transform: scale(1.2);
+        }
+        
+        .filters-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .filter-checkbox {
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+        
+        .salary-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .salary-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        
+        .salary-input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+        
+        .results {
+            display: none;
+            padding: 30px;
+        }
+        
+        .profession-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+        
+        .profession-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .match-score {
+            background: #4CAF50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            float: right;
+        }
+        
+        .match-percentage {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .skill-match-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .skill-match-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.5s ease;
+        }
+        
+        .filters-status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .filter-status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: #e9ecef;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+        
+        .filter-status-item.active {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .filter-status-item.passive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .skill-tag {
+            padding: 5px 10px;
+            background: #e9ecef;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        .skill-tag.matched {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .skill-tag.missing {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        
+        .skill-tag.extra {
+            background: #cce5ff;
+            color: #004085;
+            border: 1px solid #b8daff;
+        }
+        
+        .skills-comparison {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .skills-category {
+            margin-bottom: 15px;
+        }
+        
+        .skills-category h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .skills-category h4::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .matched-skills h4::before {
+            background: #28a745;
+        }
+        
+        .missing-skills h4::before {
+            background: #ffc107;
+        }
+        
+        .extra-skills h4::before {
+            background: #007bff;
+        }
+        
+        .empty-selection {
+            color: #999;
+            font-style: italic;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .results-count {
+            font-size: 1.2em;
+            color: #2c3e50;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .no-results h3 {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9em;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .skill-counts {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+        
+        .skill-count {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .skill-count .number {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .skill-count .label {
+            font-size: 0.8em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Профориентация по навыкам</h1>
+            <p>Выберите свои навыки → Получите подходящие профессии → Узнайте, какие навыки нужно освоить</p>
+        </div>
+        
+        <form id="careerForm">
+            <!-- БЛОК 1: Навыки -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span>🛠️</span>
+                    <h3>1. Выберите свои навыки</h3>
+                </div>
+                <p style="color: #666; margin-bottom: 20px;">Добавьте навыки, которые у вас есть. Профессии будут отсортированы по совпадению навыков.</p>
+                
+                <div class="skills-container">
+                    <div class="skills-select-wrapper">
+                        <select class="skills-select" id="skillsSelect">
+                            <option value="">Выберите навык из списка...</option>
+                            <!-- Навыки будут добавлены через JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="selected-skills" id="selectedSkills">
+                        <div class="empty-selection">Пока не выбрано ни одного навыка. Начните добавлять!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- БЛОК 2: Фильтры -->
+            <div class="form-section">
+                <div class="section-title">
+                    <span>🎯</span>
+                    <h3>2. Уточните предпочтения (опционально)</h3>
+                </div>
+                <p style="color: #666; margin-bottom: 20px;">Эти фильтры помогут отсеить неподходящие варианты.</p>
+                
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label>💰 Минимальная зарплата</label>
+                        <div class="salary-input-group">
+                            <input type="number" id="minSalary" class="salary-input" placeholder="100000" min="0" step="10000">
+                            <span>₽</span>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>🏢 Формат работы</label>
+                        <select id="workFormat" class="filter-select">
+                            <option value="any">Любой формат</option>
+                            <option value="office">Офис</option>
+                            <option value="remote">Удалённо</option>
+                            <option value="hybrid">Гибрид</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>📊 Уровень опыта</label>
+                        <select id="experienceLevel" class="filter-select">
+                            <option value="any">Любой уровень</option>
+                            <option value="noExperience">Без опыта</option>
+                            <option value="between1And3">1-3 года (Junior)</option>
+                            <option value="between3And6">3-6 лет (Middle)</option>
+                            <option value="moreThan6">6+ лет (Senior)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>
+                            <input type="checkbox" id="strictFilter" class="filter-checkbox">
+                            Строгий режим фильтрации
+                        </label>
+                        <small style="color: #666; font-size: 0.9em;">Если включено, показывать только профессии, которые проходят ВСЕ фильтры</small>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-primary">🎯 Найти подходящие профессии</button>
+        </form>
+        
+        <div class="results" id="resultsSection">
+            <div class="results-header">
+                <div class="section-title">
+                    <span>🏆</span>
+                    <h3>Подходящие профессии</h3>
+                </div>
+                <div class="results-count" id="resultsCount"></div>
+            </div>
+            
+            <div class="filters-status" id="filtersStatus">
+                <!-- Статус фильтров будет здесь -->
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #28a745;"></div>
+                    <span>Ваши навыки, которые есть в профессии</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffc107;"></div>
+                    <span>Навыки профессии, которых вам не хватает</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #007bff;"></div>
+                    <span>Ваши навыки, которых нет в профессии (не нужны)</span>
+                </div>
+            </div>
+            
+            <div id="professionsList">
+                <!-- Результаты будут здесь -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем данные -->
+<script src="professions_data.js"></script>
+<script src="model_data.js"></script>
+<script>
+    let selectedSkills = [];
+    let neuralNetwork = null;
+    let isNeuralNetworkReady = false;
+
+    // Инициализация формы
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Загружаем навыки из данных
+        loadSkills();
+        
+        // Инициализируем нейросеть в фоне
+        initializeNeuralNetworkAsync();
+        
+        // Обработка выбора навыков
+        document.getElementById('skillsSelect').addEventListener('change', function(e) {
+            if (e.target.value) {
+                addSkill(e.target.value);
+                e.target.value = ''; // Сбрасываем выбор
+            }
+        });
+
+        // Обработка формы
+        document.getElementById('careerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            findMatchingProfessions();
+        });
+    });
+
+    // Асинхронная инициализация нейросети
+    async function initializeNeuralNetworkAsync() {
+        try {
+            neuralNetwork = new SimpleProfessionNeuralNetwork();
+            await neuralNetwork.loadWeights();
+            isNeuralNetworkReady = true;
+            console.log('✅ Нейросеть готова!');
+            
+            // Добавляем переключатель в интерфейс
+            addNeuralNetworkToggle();
+        } catch (error) {
+            console.warn('❌ Нейросеть не загрузилась:', error);
+            isNeuralNetworkReady = false;
+        }
+    }
+
+    function addNeuralNetworkToggle() {
+        const form = document.getElementById('careerForm');
+        const submitBtn = form.querySelector('.btn-primary');
+        
+        if (!submitBtn) return;
+        
+        const toggleHTML = `
+            <div style="text-align: center; margin: 15px 0; padding: 10px; background: #f0f7ff; border-radius: 8px;">
+                <label style="display: inline-flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="useNeuralToggle" ${isNeuralNetworkReady ? 'checked' : 'disabled'} 
+                           style="width: 18px; height: 18px; cursor: pointer;">
+                    <span style="font-weight: 600; color: #2c3e50;">
+                        🧠 Использовать нейросеть для рекомендаций
+                    </span>
+                    ${isNeuralNetworkReady ? 
+                        '<span style="font-size: 0.85em; color: #4CAF50; background: #e8f5e9; padding: 2px 8px; border-radius: 12px;">Доступно</span>' :
+                        '<span style="font-size: 0.85em; color: #ff9800; background: #fff3e0; padding: 2px 8px; border-radius: 12px;">Загрузка...</span>'
+                    }
+                </label>
+                ${isNeuralNetworkReady ? 
+                    '<div style="font-size: 0.85em; color: #666; margin-top: 5px;">Нейросеть найдёт сложные взаимосвязи между навыками</div>' :
+                    ''
+                }
+            </div>
+        `;
+        
+        submitBtn.insertAdjacentHTML('beforebegin', toggleHTML);
+    }
+
+    function loadSkills() {
+        try {
+            const allSkills = getAllSkills();
+            const skillsSelect = document.getElementById('skillsSelect');
+            
+            // Сортируем навыки по алфавиту
+            allSkills.sort().forEach(skill => {
+                const option = document.createElement('option');
+                option.value = skill;
+                option.textContent = skill.charAt(0).toUpperCase() + skill.slice(1);
+                skillsSelect.appendChild(option);
+            });
+            
+            console.log(`Загружено ${allSkills.length} уникальных навыков`);
+            
+        } catch (error) {
+            console.error('Ошибка загрузки навыков:', error);
+            const skillsContainer = document.querySelector('.skills-container');
+            skillsContainer.innerHTML = '<div class="loading">Ошибка загрузки данных. Пожалуйста, обновите страницу.</div>';
+        }
+    }
+
+    function addSkill(skill) {
+        if (!selectedSkills.includes(skill)) {
+            selectedSkills.push(skill);
+            updateSelectedSkillsDisplay();
+        }
+    }
+
+    function removeSkill(skill) {
+        selectedSkills = selectedSkills.filter(s => s !== skill);
+        updateSelectedSkillsDisplay();
+    }
+
+    function updateSelectedSkillsDisplay() {
+        const selectedSkillsContainer = document.getElementById('selectedSkills');
+        
+        if (selectedSkills.length === 0) {
+            selectedSkillsContainer.innerHTML = '<div class="empty-selection">Пока не выбрано ни одного навыка. Начните добавлять!</div>';
+            return;
+        }
+        
+        selectedSkillsContainer.innerHTML = '';
+        selectedSkills.forEach(skill => {
+            const skillElement = document.createElement('div');
+            skillElement.className = 'selected-skill';
+            skillElement.innerHTML = `
+                ${skill}
+                <button type="button" class="remove-skill" onclick="removeSkill('${skill}')">×</button>
+            `;
+            selectedSkillsContainer.appendChild(skillElement);
+        });
+    }
+
+    // Основной алгоритм подбора
+    async function findMatchingProfessions() {
+        const filters = {
+            minSalary: document.getElementById('minSalary').value ? parseInt(document.getElementById('minSalary').value) : 0,
+            workFormat: document.getElementById('workFormat').value,
+            experienceLevel: document.getElementById('experienceLevel').value,
+            strictMode: document.getElementById('strictFilter').checked
+        };
+
+        // Проверяем, что выбраны навыки
+        if (selectedSkills.length === 0) {
+            alert('Пожалуйста, выберите хотя бы один навык!');
+            return;
+        }
+
+        // Показываем индикатор загрузки
+        showLoadingIndicator('Анализ навыков...');
+
+        try {
+            let results;
+            const useNeural = document.getElementById('useNeuralToggle')?.checked && isNeuralNetworkReady;
+            
+            if (useNeural && neuralNetwork && neuralNetwork.loaded) {
+                // Используем нейросеть
+                results = await getNeuralEnhancedResults(filters);
+            } else {
+                // Используем классический алгоритм
+                results = getClassicalResults(filters);
+            }
+            
+            // Применяем фильтры
+            if (filters.strictMode) {
+                results = results.filter(r => r.passesFilters);
+            }
+            
+            displayResults(results, filters, useNeural);
+            
+        } catch (error) {
+            console.error('Ошибка при поиске профессий:', error);
+            // Fallback на классический алгоритм
+            const results = getClassicalResults(filters);
+            displayResults(results, filters, false);
+        } finally {
+            hideLoadingIndicator();
+        }
+    }
+
+    // Классический алгоритм (ваш исходный код)
+    function getClassicalResults(filters) {
+        const matches = professionsData.map(profession => {
+            // Получаем все навыки профессии (уникальные, в нижнем регистре)
+            const professionSkills = [
+                ...profession.key_technologies.split(', '),
+                ...profession.hard_skills.split(', ')
+            ].map(skill => skill.toLowerCase().trim());
+            
+            const uniqueProfSkills = [...new Set(professionSkills)];
+            
+            // Ваши навыки (уникальные, в нижнем регистре)
+            const userSkills = selectedSkills.map(skill => skill.toLowerCase().trim());
+            
+            // 1. Навыки, которые ЕСТЬ у вас и НУЖНЫ для профессии (совпадения)
+            const matchedSkills = userSkills.filter(userSkill => 
+                uniqueProfSkills.some(profSkill => 
+                    profSkill.includes(userSkill) || userSkill.includes(profSkill)
+                )
+            );
+            
+            // 2. Навыки, которые НУЖНЫ для профессии, но ОТСУТСТВУЮТ у вас
+            const missingSkills = uniqueProfSkills.filter(profSkill => 
+                !userSkills.some(userSkill => 
+                    profSkill.includes(userSkill) || userSkill.includes(profSkill)
+                )
+            );
+            
+            // 3. Навыки, которые ЕСТЬ у вас, но НЕ НУЖНЫ для профессии
+            const extraSkills = userSkills.filter(userSkill => 
+                !uniqueProfSkills.some(profSkill => 
+                    profSkill.includes(userSkill) || userSkill.includes(profSkill)
+                )
+            );
+            
+            // Рассчитываем процент совпадения
+            const matchPercentage = uniqueProfSkills.length > 0 ? 
+                (matchedSkills.length / uniqueProfSkills.length) * 100 : 0;
+            
+            // Проверяем фильтры
+            const passesFilters = checkFilters(profession, filters);
+            
+            return {
+                ...profession,
+                matchPercentage: Math.round(matchPercentage),
+                uniqueProfSkills: uniqueProfSkills,
+                matchedSkills: matchedSkills,
+                missingSkills: missingSkills,
+                extraSkills: extraSkills,
+                passesFilters: passesFilters,
+                isNeuralEnhanced: false
+            };
+        });
+
+        // Сортируем по проценту совпадения навыков
+        matches.sort((a, b) => b.matchPercentage - a.matchPercentage);
+        return matches;
+    }
+
+    // Результаты с улучшением от нейросети
+    async function getNeuralEnhancedResults(filters) {
+        // Получаем классические результаты
+        const classicalResults = getClassicalResults(filters);
+        
+        // Получаем предсказания нейросети
+        const neuralPredictions = neuralNetwork.predict(selectedSkills, classicalResults.length);
+        
+        // Создаем карту вероятностей от нейросети
+        const neuralMap = {};
+        neuralPredictions.forEach(pred => {
+            neuralMap[pred.profession] = pred.probability;
+        });
+        
+        // Объединяем результаты
+        const enhancedResults = classicalResults.map(result => {
+            const neuralProb = neuralMap[result.profession] || 0;
+            const neuralPercentage = Math.round(neuralProb * 100);
+            
+            // Взвешенное среднее: 70% нейросеть + 30% классика
+            const combinedPercentage = Math.round(
+                (neuralPercentage * 0.7) + (result.matchPercentage * 0.3)
+            );
+            
+            return {
+                ...result,
+                matchPercentage: combinedPercentage,
+                neuralPercentage: neuralPercentage,
+                classicalPercentage: result.matchPercentage,
+                isNeuralEnhanced: true,
+                neuralConfidence: neuralProb
+            };
+        });
+        
+        // Сортируем по улучшенной оценке
+        enhancedResults.sort((a, b) => b.matchPercentage - a.matchPercentage);
+        return enhancedResults;
+    }
+
+    function checkFilters(profession, filters) {
+        if (filters.strictMode) {
+            const salaryPass = profession.median_salary >= filters.minSalary;
+            const formatPass = filters.workFormat === 'any' || profession.work_format === filters.workFormat;
+            const expKey = getExperienceKey(profession.experience_level);
+            const expPass = filters.experienceLevel === 'any' || expKey === filters.experienceLevel;
+            return salaryPass && formatPass && expPass;
+        }
+        return true;
+    }
+
+    function getExperienceKey(experienceText) {
+        const text = experienceText.toLowerCase();
+        if (text.includes('без опыта') || text.includes('нет опыта')) return 'noExperience';
+        if (text.includes('1-3') || text.includes('1–3') || text.includes('1 3') || text.includes('junior')) return 'between1And3';
+        if (text.includes('3-6') || text.includes('3–6') || text.includes('3 6') || text.includes('middle')) return 'between3And6';
+        if (text.includes('более 6') || text.includes('6+') || text.includes('от 6') || text.includes('senior')) return 'moreThan6';
+        return 'between1And3';
+    }
+
+    // Вспомогательные функции для индикатора загрузки
+    function showLoadingIndicator(message = 'Загрузка...') {
+        let loadingDiv = document.getElementById('loadingIndicator');
+        if (!loadingDiv) {
+            loadingDiv = document.createElement('div');
+            loadingDiv.id = 'loadingIndicator';
+            loadingDiv.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px 30px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+                z-index: 1000;
+                text-align: center;
+                border: 1px solid #e0e0e0;
+            `;
+            document.body.appendChild(loadingDiv);
+        }
+        loadingDiv.innerHTML = `
+            <div style="margin-bottom: 10px;">
+                <div style="width: 40px; height: 40px; border: 3px solid #f3f3f3; border-top: 3px solid #4CAF50; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            </div>
+            <div style="font-weight: 600; color: #2c3e50;">${message}</div>
+            <style>
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            </style>
+        `;
+        loadingDiv.style.display = 'block';
+    }
+
+    function hideLoadingIndicator() {
+        const loadingDiv = document.getElementById('loadingIndicator');
+        if (loadingDiv) {
+            loadingDiv.style.display = 'none';
+        }
+    }
+
+    // Отображение результатов
+    function displayResults(results, filters, usedNeural = false) {
+        const resultsSection = document.getElementById('resultsSection');
+        const professionsList = document.getElementById('professionsList');
+        const resultsCount = document.getElementById('resultsCount');
+        const filtersStatus = document.getElementById('filtersStatus');
+        
+        resultsSection.style.display = 'block';
+        professionsList.innerHTML = '';
+        
+        // Обновляем счетчик
+        resultsCount.textContent = `Найдено: ${results.length} профессий`;
+        
+        // Показываем статус фильтров
+        updateFiltersStatus(filtersStatus, filters, results.length, usedNeural);
+        
+        if (results.length === 0) {
+            professionsList.innerHTML = `
+                <div class="no-results">
+                    <h3>😔 Не найдено подходящих профессий</h3>
+                    <p>Попробуйте:</p>
+                    <ul style="margin-top: 10px; padding-left: 20px; text-align: left; display: inline-block;">
+                        <li>Добавить больше навыков</li>
+                        <li>Уменьшить требования по зарплате</li>
+                        <li>Выключить строгий режим фильтрации</li>
+                        <li>Расширить критерии поиска</li>
+                    </ul>
+                </div>`;
+            return;
+        }
+        
+        // Отображаем топ-15 результатов
+        results.slice(0, 15).forEach(profession => {
+            const card = document.createElement('div');
+            card.className = 'profession-card';
+            
+            // Определяем цвет заголовка
+            let borderColor = '#4CAF50';
+            if (profession.matchPercentage < 50) borderColor = '#ffc107';
+            if (profession.matchPercentage < 30) borderColor = '#dc3545';
+            
+            card.style.borderLeftColor = borderColor;
+            
+            // Статистика по навыкам
+            const totalProfSkills = profession.uniqueProfSkills.length;
+            const matchedCount = profession.matchedSkills.length;
+            const missingCount = profession.missingSkills.length;
+            
+            let neuralBadge = '';
+            if (profession.isNeuralEnhanced) {
+                neuralBadge = `
+                    <div style="display: inline-block; margin-left: 10px; padding: 2px 8px; background: #4CAF50; color: white; border-radius: 12px; font-size: 0.7em; vertical-align: middle;">
+                        🧠 НЕЙРОСЕТЬ
+                    </div>
+                `;
+            }
+            
+            card.innerHTML = `
+                <div class="match-score" style="background: ${borderColor}">${profession.matchPercentage}%</div>
+                <h4>${profession.profession}${neuralBadge}</h4>
+                
+                ${profession.isNeuralEnhanced ? `
+                    <div style="margin: 10px 0; padding: 8px; background: #e8f5e9; border-radius: 6px; border-left: 3px solid #4CAF50;">
+                        <span style="font-weight: 600; color: #2c3e50;">🧠 Улучшено нейросетью</span>
+                        <div style="display: flex; gap: 15px; margin-top: 5px; font-size: 0.9em;">
+                            <span>Классика: ${profession.classicalPercentage}%</span>
+                            <span>Нейросеть: ${profession.neuralPercentage}%</span>
+                            <span>Итог: ${profession.matchPercentage}%</span>
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <div class="skill-counts">
+                    <div class="skill-count">
+                        <div class="number" style="color: #28a745;">${matchedCount}</div>
+                        <div class="label">Совпадений</div>
+                    </div>
+                    <div class="skill-count">
+                        <div class="number" style="color: #ffc107;">${missingCount}</div>
+                        <div class="label">Навыков не хватает</div>
+                    </div>
+                    <div class="skill-count">
+                        <div class="number" style="color: #007bff;">${profession.extraSkills.length}</div>
+                        <div class="label">Лишних навыков</div>
+                    </div>
+                </div>
+                
+                <div class="match-percentage">${profession.matchPercentage}% совпадений</div>
+                <div class="skill-match-bar">
+                    <div class="skill-match-fill" style="width: ${profession.matchPercentage}%"></div>
+                </div>
+                
+                <div class="skills-comparison">
+                    ${profession.matchedSkills.length > 0 ? `
+                        <div class="skills-category matched-skills">
+                            <h4>✅ Ваши навыки, которые есть в профессии (${matchedCount}/${totalProfSkills})</h4>
+                            <div class="skills-list">
+                                ${profession.matchedSkills.map(skill => 
+                                    `<span class="skill-tag matched">${skill}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${profession.missingSkills.length > 0 ? `
+                        <div class="skills-category missing-skills">
+                            <h4>⚠️ Навыки профессии, которых вам не хватает (${missingCount})</h4>
+                            <p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">Чтобы освоить эту профессию, вам нужно изучить:</p>
+                            <div class="skills-list">
+                                ${profession.missingSkills.map(skill => 
+                                    `<span class="skill-tag missing">${skill}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${profession.extraSkills.length > 0 ? `
+                        <div class="skills-category extra-skills">
+                            <h4>💡 Ваши навыки, которые не нужны для этой профессии (${profession.extraSkills.length})</h4>
+                            <p style="color: #666; font-size: 0.9em; margin-bottom: 10px;">Эти навыки у вас есть, но они не требуются:</p>
+                            <div class="skills-list">
+                                ${profession.extraSkills.map(skill => 
+                                    `<span class="skill-tag extra">${skill}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                    <p><strong>💰 Средняя зарплата:</strong> ${profession.median_salary ? profession.median_salary.toLocaleString('ru-RU') + ' ₽' : 'не указана'}</p>
+                    <p><strong>🏢 Формат:</strong> ${profession.work_format === 'office' ? 'Офис' : profession.work_format === 'remote' ? 'Удалённо' : 'Гибрид'}</p>
+                    <p><strong>📊 Требуемый опыт:</strong> ${profession.experience_level}</p>
+                    <p><strong>📚 Всего навыков в профессии:</strong> ${totalProfSkills}</p>
+                </div>
+            `;
+            professionsList.appendChild(card);
+        });
+        
+        // Прокрутка к результатам
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateFiltersStatus(container, filters, resultCount, usedNeural = false) {
+        let statusHTML = `
+            <div class="filter-status-item active">
+                ${usedNeural ? '🧠' : '📊'} Основной критерий: ${usedNeural ? 'нейросеть + совпадение навыков' : 'совпадение навыков'}
+            </div>
+        `;
+        
+        if (filters.minSalary > 0) {
+            statusHTML += `
+                <div class="filter-status-item ${filters.strictMode ? 'active' : 'passive'}">
+                    ${filters.strictMode ? '✓' : '🎯'} Минимальная зарплата: ${filters.minSalary.toLocaleString('ru-RU')} ₽
+                </div>
+            `;
+        }
+        
+        if (filters.workFormat !== 'any') {
+            const formatText = filters.workFormat === 'office' ? 'Офис' : 
+                             filters.workFormat === 'remote' ? 'Удалённо' : 'Гибрид';
+            statusHTML += `
+                <div class="filter-status-item ${filters.strictMode ? 'active' : 'passive'}">
+                    ${filters.strictMode ? '✓' : '🎯'} Формат работы: ${formatText}
+                </div>
+            `;
+        }
+        
+        if (filters.experienceLevel !== 'any') {
+            const expText = {
+                'noExperience': 'Без опыта',
+                'between1And3': '1-3 года',
+                'between3And6': '3-6 лет',
+                'moreThan6': '6+ лет'
+            }[filters.experienceLevel];
+            
+            statusHTML += `
+                <div class="filter-status-item ${filters.strictMode ? 'active' : 'passive'}">
+                    ${filters.strictMode ? '✓' : '🎯'} Уровень опыта: ${expText}
+                </div>
+            `;
+        }
+        
+        statusHTML += `
+            <div class="filter-status-item ${filters.strictMode ? 'active' : 'passive'}">
+                ${filters.strictMode ? '🔒' : '🔓'} Режим фильтрации: ${filters.strictMode ? 'Строгий' : 'Мягкий'}
+            </div>
+            <div class="filter-status-item ${usedNeural ? 'active' : ''}">
+                ${usedNeural ? '🧠' : '📊'} Алгоритм: ${usedNeural ? 'Нейросеть' : 'Классический'}
+            </div>
+            <div class="filter-status-item active">
+                👁️ Показано профессий: ${resultCount}
+            </div>
+        `;
+        
+        container.innerHTML = statusHTML;
+    }
+</script>
+</body>
+</html>
